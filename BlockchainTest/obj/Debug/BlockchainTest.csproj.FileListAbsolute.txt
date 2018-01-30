@@ -7,3 +7,6 @@ E:\Source\VisualStudio\BlockchainTest\BlockchainTest\obj\Debug\BlockchainTest.cs
 E:\Biz\Sources\VisualStudio\BlockchainTest\BlockchainTest\bin\Debug\BlockchainTest.exe.config
 E:\Biz\Sources\VisualStudio\BlockchainTest\BlockchainTest\obj\Debug\BlockchainTest.exe
 E:\Biz\Sources\VisualStudio\BlockchainTest\BlockchainTest\obj\Debug\BlockchainTest.pdb
+C:\Users\aiki6\Documents\GitHub\BlockchainTest\BlockchainTest\bin\Debug\BlockchainTest.exe.config
+C:\Users\aiki6\Documents\GitHub\BlockchainTest\BlockchainTest\obj\Debug\BlockchainTest.exe
+C:\Users\aiki6\Documents\GitHub\BlockchainTest\BlockchainTest\obj\Debug\BlockchainTest.pdb

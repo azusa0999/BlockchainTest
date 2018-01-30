@@ -16,20 +16,20 @@ namespace BlockchainTest
         static void Main(string[] args)
         {
             // Genesis block
-            string[] transactions = { "DSKIM Sent 1k Bitcoins to ACS." };
+            string[] transactions = { "Genesis Sent 1k Bitcoins to second." };
             // 최초 노드 : genesisBlock
             BlockHeader blockheader = new BlockHeader(null, transactions);
             Block genesisBlock = new Block(blockheader, transactions);
             Console.WriteLine("Block Hash : {0}", genesisBlock.getBlockHash());
             
             // Transaction Forgery
-            string[] secondTransactions = new string[]{ "DSKIM Sent 10k Bitcoins to ACS."};
+            string[] secondTransactions = new string[]{ "Second Sent 10k Bitcoins to third."};
             BlockHeader secondBlockheader = new BlockHeader(Encoding.UTF8.GetBytes(genesisBlock.getBlockHash()), secondTransactions);
             Block secondBlock = new Block(secondBlockheader, secondTransactions);
             Console.WriteLine("Second Block Hash : {0}", secondBlock.getBlockHash());
 
             // Third block
-            String[] thirdTransactions = { "DSKIM Sent 500k Bitcoins to ACS." };
+            String[] thirdTransactions = { "Third Sent 500k Bitcoins to fourth." };
             BlockHeader thirdBlockheader = new BlockHeader(Encoding.UTF8.GetBytes(genesisBlock.getBlockHash()), thirdTransactions);
             Block thirdBlock = new Block(thirdBlockheader, thirdTransactions);
             Console.WriteLine("Third Block Hash : {0}", thirdBlock.getBlockHash());
