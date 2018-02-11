@@ -30,6 +30,8 @@ namespace BlockchainTest.Class
 
             return string.Join(",", blockHash);
         }
+
+        
     }
 
     public class BlockHeader
@@ -38,6 +40,7 @@ namespace BlockchainTest.Class
         {
             this.previousBlockHash = previousBlockHash;
             this.merkleRootHash = transactions.GetHashCode();
+            this.timestamp = GetTime();
         }
         
         private int version;
@@ -56,6 +59,19 @@ namespace BlockchainTest.Class
             }
             tmpStr += merkleRootHash;
             return Encoding.UTF8.GetBytes(tmpStr);
+        }
+
+        /// <summary>
+        /// Javascript GetTime() 구현
+        /// </summary>
+        /// <returns></returns>
+        private int GetTime()
+        {
+            int retval = 0;
+            var st = new DateTime(1970, 1, 1);
+            TimeSpan t = (DateTime.Now.ToUniversalTime() - st);
+            retval = (int)(t.TotalMilliseconds + 0.5);
+            return retval;
         }
     }
 }
