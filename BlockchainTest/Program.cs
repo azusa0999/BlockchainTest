@@ -23,11 +23,13 @@ namespace BlockchainTest
             Console.WriteLine("Block Hash : {0}", genesisBlock.getBlockHash());
 
             Block previousBlock = genesisBlock;
-            for(int i = 0; i < 5; i++)
+            for(int i = 0; i < 2; i++)
             {
                 BlockHeader secondBlockheader = new BlockHeader(Encoding.UTF8.GetBytes(previousBlock.getBlockHash()), transactions);
                 Block nextBlock = new Block(secondBlockheader, transactions);
+                int count = nextBlock.ProofOfWorkCount();
                 Console.WriteLine("{0} th Block Hash : {1}", i.ToString(), nextBlock.getBlockHash());
+                Console.WriteLine(" └ COUNT of Proof of Work : {0}", count);
                 previousBlock = nextBlock;
             }
             
