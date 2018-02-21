@@ -20,18 +20,43 @@ namespace BlockchainTest.Class
         private int transactionCount;
         private object[] transactions;
 
-
+        /// <summary>
+        /// 블록 헤더를 해시화하여 반환한다.
+        /// </summary>
+        /// <returns></returns>
         public string getBlockHash()
         {
             byte[] bytes = blockHeader.toByteArray();
-            SHA256Managed hashstring = new SHA256Managed();
-            byte[] blockHash = hashstring.ComputeHash(bytes);
-            blockHash = hashstring.ComputeHash(blockHash);
+            using (SHA256Managed hashstring = new SHA256Managed())
+            {
+                // 해시화를 두 번 연속으로 설정.
+                byte[] blockHash = hashstring.ComputeHash(bytes);
+                blockHash = hashstring.ComputeHash(blockHash);
 
-            return string.Join(",", blockHash);
+                return ByteArrayToString(blockHash);
+            }
         }
 
-        
+        public int ProofOfWorkCount()
+        {
+            return blockHeader.ProofOfWorkCount();
+        }
+
+
+        /// <summary>
+        /// 바이트어레이를 String으로 변환
+        /// </summary>
+        /// <param name="bts"></param>
+        /// <returns></returns>
+        public static string ByteArrayToString(byte[] bts)
+        {
+            StringBuilder strBld = new StringBuilder();
+            foreach (byte bt in bts)
+                strBld.AppendFormat("{0:X2}", bt);
+
+            return strBld.ToString();
+        }
+
     }
 
     public class BlockHeader
@@ -40,38 +65,67 @@ namespace BlockchainTest.Class
         {
             this.previousBlockHash = previousBlockHash;
             this.merkleRootHash = transactions.GetHashCode();
-            this.timestamp = GetTime();
         }
-        
+        /// <summary>
+        /// 소프트웨어, 또는 프로토콜 등의 업그레이드를 추적하기 위해 사용되는 버전 정보
+        /// </summary>
         private int version;
+        /// <summary>
+        /// 블록체인 상의 이전 블록(부모 블록)의 해시값
+        /// </summary>
         private byte[] previousBlockHash;
+        /// <summary>
+        /// 머클트리의 루트에 대한 해시값
+        /// </summary>
         private int merkleRootHash;
+        /// <summary>
+        /// 해당 블록의 생성 시각
+        /// </summary>
         private int timestamp;
-        private int difficultyTarget;
-        private int nonce;
+        /// <summary>
+        ///  채굴과정에서 필요한 작업 증명(Proof of Work) 알고리즘의 난이도 목표
+        /// </summary>
+        private static int difficultyTarget = 5;
+        /// <summary>
+        ///  채굴과정의 작업 증명에서 사용되는 카운터
+        /// </summary>
+        private static int nonce = 0;
 
-        public byte[] toByteArray()
+
+        /// <summary>
+        /// 작업증명
+        /// </summary>
+        public int ProofOfWorkCount()
         {
-            string tmpStr = "";
-            if (previousBlockHash != null)
+            using (SHA256Managed hashstring = new SHA256Managed())
             {
-                tmpStr += string.Join(",", previousBlockHash);
+                byte[] bt;
+                string sHash = string.Empty;
+                while (sHash == string.Empty || sHash.Substring(0, difficultyTarget) != ("").PadLeft(difficultyTarget, '0'))
+                {
+                    bt = Encoding.UTF8.GetBytes(merkleRootHash + nonce.ToString());
+                    sHash = Block.ByteArrayToString(hashstring.ComputeHash(bt));
+                    nonce++;
+                }
+                return nonce;
             }
-            tmpStr += merkleRootHash;
-            return Encoding.UTF8.GetBytes(tmpStr);
         }
 
         /// <summary>
-        /// Javascript GetTime() 구현
+        /// 거래내역을 byte로 반환한다.
         /// </summary>
         /// <returns></returns>
-        private int GetTime()
+        public byte[] toByteArray()
         {
-            int retval = 0;
-            var st = new DateTime(1970, 1, 1);
-            TimeSpan t = (DateTime.Now.ToUniversalTime() - st);
-            retval = (int)(t.TotalMilliseconds + 0.5);
-            return retval;
+            string tmpStr = "";
+            //이전 블록이 있다면 처음에 해시를 추가한다.
+            if (previousBlockHash != null)
+            {
+                tmpStr += Convert.ToBase64String(previousBlockHash);
+            }
+            tmpStr += merkleRootHash.ToString();
+            return Encoding.UTF8.GetBytes(tmpStr);
         }
+
     }
 }
