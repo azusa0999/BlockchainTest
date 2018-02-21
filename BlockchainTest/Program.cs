@@ -23,7 +23,7 @@ namespace BlockchainTest
 
             Stopwatch stopw = new Stopwatch();//시간 측정 클래스
             Block previousBlock = genesisBlock;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
                 BlockHeader secondBlockheader = new BlockHeader(Encoding.UTF8.GetBytes(previousBlock.getBlockHash()), transactions);
                 Block nextBlock = new Block(secondBlockheader, transactions);
