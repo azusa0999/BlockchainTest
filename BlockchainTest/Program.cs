@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using BlockchainTest.Class;
+using System.Diagnostics;
 
 namespace BlockchainTest
 {
@@ -22,15 +21,20 @@ namespace BlockchainTest
             Block genesisBlock = new Block(blockheader, transactions);
             Console.WriteLine("Block Hash : {0}", genesisBlock.getBlockHash());
 
+            Stopwatch stopw = new Stopwatch();//시간 측정 클래스
             Block previousBlock = genesisBlock;
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 BlockHeader secondBlockheader = new BlockHeader(Encoding.UTF8.GetBytes(previousBlock.getBlockHash()), transactions);
                 Block nextBlock = new Block(secondBlockheader, transactions);
-                int count = nextBlock.ProofOfWorkCount();
+                stopw.Start();
+                int count = secondBlockheader.ProofOfWorkCount();
+                stopw.Stop();
                 Console.WriteLine("{0} th Block Hash : {1}", i.ToString(), nextBlock.getBlockHash());
-                Console.WriteLine(" └ COUNT of Proof of Work : {0}", count);
+                Console.WriteLine("   └ COUNT of Proof of Work : {0} th loop", count);
+                Console.WriteLine("   └ Delay : {0} millisecond", stopw.ElapsedMilliseconds);
                 previousBlock = nextBlock;
+                stopw.Reset();
             }
             
             Console.Write("Any key to exit");

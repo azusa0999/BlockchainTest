@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 namespace BlockchainTest.Class
@@ -36,13 +33,7 @@ namespace BlockchainTest.Class
                 return ByteArrayToString(blockHash);
             }
         }
-
-        public int ProofOfWorkCount()
-        {
-            return blockHeader.ProofOfWorkCount();
-        }
-
-
+        
         /// <summary>
         /// 바이트어레이를 String으로 변환
         /// </summary>
@@ -85,7 +76,7 @@ namespace BlockchainTest.Class
         /// <summary>
         ///  채굴과정에서 필요한 작업 증명(Proof of Work) 알고리즘의 난이도 목표
         /// </summary>
-        private static int difficultyTarget = 5;
+        private static uint difficultyTarget = 5;
         /// <summary>
         ///  채굴과정의 작업 증명에서 사용되는 카운터
         /// </summary>
@@ -101,7 +92,7 @@ namespace BlockchainTest.Class
             {
                 byte[] bt;
                 string sHash = string.Empty;
-                while (sHash == string.Empty || sHash.Substring(0, difficultyTarget) != ("").PadLeft(difficultyTarget, '0'))
+                while (sHash == string.Empty || sHash.Substring(0, (int)difficultyTarget) != ("").PadLeft((int)difficultyTarget, '0'))
                 {
                     bt = Encoding.UTF8.GetBytes(merkleRootHash + nonce.ToString());
                     sHash = Block.ByteArrayToString(hashstring.ComputeHash(bt));
